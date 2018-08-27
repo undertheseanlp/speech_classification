@@ -40,7 +40,7 @@ print('public test: ', X_publictest.shape)
 
 
 batch_size = 1024
-nb_epochs = 1000
+nb_epochs = 1500
 
 # Train Gender
 opt = RMSprop()
