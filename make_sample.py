@@ -36,29 +36,51 @@ def extract_features(file_data, bands=60, frames=41):
         features[i, :, :, 1] = librosa.feature.delta(features[i, :, :, 0])
     return label, features
 
+
 def get_duration(filepath):
     sound_clip, sr = librosa.load(filepath)
     duration = librosa.get_duration(y=sound_clip, sr=sr)
     return duration
 
-TRAIN_FOLDER = "data/train"
-labels = []
-N = 2000  # number instances per labels
-i = 0
-is_first = False
-folders = listdir(TRAIN_FOLDER)
-total = N * len(folders)
-files = []
-for label in folders:
-    tmp = listdir(join(TRAIN_FOLDER, label))[:N]
-    tmp = [join(TRAIN_FOLDER, label, file) for file in tmp]
-    tmp = [(label, file) for file in tmp]
-    files.extend(tmp)
-# print(durations)
 
-p = Pool(20)
-n = len(files)
-features = list(tqdm.tqdm(p.imap(extract_features, files), total=n))
+def make_train_data():
+    TRAIN_FOLDER = "data/train"
+    labels = []
+    N = 20000  # number instances per labels
+    i = 0
+    is_first = False
+    folders = listdir(TRAIN_FOLDER)
+    total = N * len(folders)
+    files = []
+    for label in folders:
+        tmp = listdir(join(TRAIN_FOLDER, label))[:N]
+        tmp = [join(TRAIN_FOLDER, label, file) for file in tmp]
+        tmp = [(label, file) for file in tmp]
+        files.extend(tmp)
+    # print(durations)
 
-joblib.dump(features, "zalo_data/train_full.data.bin")
-print(len(features))
+    p = Pool(20)
+    n = len(files)
+    features = list(tqdm.tqdm(p.imap(extract_features, files), total=n))
+
+    joblib.dump(features, "tmp/zalo_data/train_full.data.bin")
+    print(len(features))
+
+
+def make_test_data():
+    TEST_FOLDER = "data/public_test"
+    tmp = listdir(TEST_FOLDER)
+    files = []
+    for label in tmp:
+        file = join(TEST_FOLDER, label)
+        files.append((label, file))
+    p = Pool(20)
+    n = len(files)
+    features = list(tqdm.tqdm(p.imap(extract_features, files), total=n))
+
+    joblib.dump(features, "tmp/zalo_data/test.data.bin")
+    print(len(features))
+
+
+# make_train_data()
+make_test_data()
