@@ -47,7 +47,7 @@ Mô hình được train bởi hàm tối ưu Adam với learning rate = 0.0001,
 
 *Dự đoán*
 
-Mỗi một sample được chia thành mỗi 250 frames, sử dụng phương pháp trích rút đặc trưng như mô tả ở trên, rồi đưa vào mạng CNN. Nhãn của file âm thanh được chọn bởi phương pháp Majority voting.
+Mỗi một sample được chia thành mỗi 250 frames, sử dụng phương pháp trích rút đặc trưng như mô tả ở trên, rồi đưa vào mạng CNN. Nhãn của file âm thanh được chọn bởi chiến thuật majority voting.
 
 
 # Cách sử dụng
@@ -62,10 +62,12 @@ pip install requirements.txt
 
 ## Huấn luyện mô hình 
 
-Để huấn luyện mô hình, chạy script `make_sample.py` và `train.py` 
+Để huấn luyện mô hình, chạy script `preprocessing.py` và `train.py` 
+
+Chú ý: Dữ liệu train gồm có folder `train` cần đặt vào thư mục `data`
 
 ```
-python make_sample.py
+python preprocessing.py train
 python train.py
 ```
 
@@ -74,6 +76,7 @@ python train.py
 Để dự đoán, chạy script `predict.py` 
 
 ```
+python preprocessing.py test
 python predict.py 
 ``` 
 

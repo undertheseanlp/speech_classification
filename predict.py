@@ -1,7 +1,8 @@
 import os
 import numpy as np
-
 import joblib
+from keras.models import load_model
+
 
 prediction_filename = "submission.csv"
 try:
@@ -9,8 +10,8 @@ try:
 except Exception:
     pass
 
-model = None
-test_data = joblib.load("tmp/zalo_data/test.data.bin")
+model = load_model("model.h5")
+test_data = joblib.load("tmp/test.data.bin")
 
 map_values = [(0, 1), (0, 0), (0, 2), (1, 1), (1, 0), (1, 2)]
 prediction_file = open(prediction_filename, "a")
@@ -25,3 +26,4 @@ for label, X in test_data:
         count_error_file += 1
     gender, accent = map_values[value]
     prediction_file.write(f"{label},{gender},{accent}\n")
+print(f"Results is saved in file {prediction_filename}")
