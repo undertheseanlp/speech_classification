@@ -4,7 +4,6 @@ from sklearn.metrics import classification_report, accuracy_score
 
 def extract_id(row):
     return int(row["id"].split(".")[0])
-    print(0)
 
 
 def extract_label(row):

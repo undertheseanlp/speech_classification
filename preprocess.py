@@ -1,14 +1,24 @@
-import librosa
+from multiprocessing.pool import Pool
+from os import listdir
 import numpy as np
+import librosa
+from os.path import join
+import tqdm
+import joblib
+
 
 def windows(data, window_size):
     start = 0
-    while start < len(data):
+    i = 0
+    max_i = 1000
+    while (start < len(data)) and (i < max_i):
         yield int(start), int(start + window_size)
-        start += (window_size / 2)
+        start += window_size
+        i += 1
 
 
-def extract_features(filepath, bands=60, frames=41):
+def extract_features(file_data, bands=60, frames=11):
+    label, filepath = file_data
     window_size = 512 * (frames - 1)
     log_specgrams = []
 
@@ -24,4 +34,47 @@ def extract_features(filepath, bands=60, frames=41):
     features = np.concatenate((log_specgrams, np.zeros(np.shape(log_specgrams))), axis=3)
     for i in range(len(features)):
         features[i, :, :, 1] = librosa.feature.delta(features[i, :, :, 0])
-    return features
+    return label, features
+
+
+def get_duration(filepath):
+    sound_clip, sr = librosa.load(filepath)
+    duration = librosa.get_duration(y=sound_clip, sr=sr)
+    return duration
+
+
+def make_train_data():
+    TRAIN_FOLDER = "data/train"
+    folders = listdir(TRAIN_FOLDER)
+    files = []
+    for label in folders:
+        tmp = listdir(join(TRAIN_FOLDER, label))
+        tmp = [join(TRAIN_FOLDER, label, file) for file in tmp]
+        tmp = [(label, file) for file in tmp]
+        files.extend(tmp)
+
+    p = Pool(20)
+    n = len(files)
+    features = list(tqdm.tqdm(p.imap(extract_features, files), total=n))
+
+    joblib.dump(features, "tmp/zalo_data/train_full.data.bin")
+    print(len(features))
+
+
+def make_test_data():
+    TEST_FOLDER = "data/public_test"
+    tmp = listdir(TEST_FOLDER)
+    files = []
+    for label in tmp:
+        file = join(TEST_FOLDER, label)
+        files.append((label, file))
+    p = Pool(20)
+    n = len(files)
+    features = list(tqdm.tqdm(p.imap(extract_features, files), total=n))
+
+    joblib.dump(features, "tmp/zalo_data/test.data.bin")
+    print(len(features))
+
+
+make_train_data()
+make_test_data()

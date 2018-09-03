@@ -9,8 +9,6 @@ Nhóm tác giả:
 * Vũ Anh <anhv.ict91@gmail.com>
 * Truong Do <truongdq54@gmail.com>
 
-# Cấu trúc thư mục 
-
 
 # Mô tả thuật toán 
 
