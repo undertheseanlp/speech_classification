@@ -10,14 +10,14 @@ import joblib
 def windows(data, window_size):
     start = 0
     i = 0
-    max_i = 300
-    while start < len(data) and i < max_i:
+    max_i = 1000
+    while (start < len(data)) and (i < max_i):
         yield int(start), int(start + window_size)
         start += window_size
         i += 1
 
 
-def extract_features(file_data, bands=60, frames=41):
+def extract_features(file_data, bands=60, frames=11):
     label, filepath = file_data
     window_size = 512 * (frames - 1)
     log_specgrams = []
@@ -45,19 +45,13 @@ def get_duration(filepath):
 
 def make_train_data():
     TRAIN_FOLDER = "data/train"
-    labels = []
-    N = 20000  # number instances per labels
-    i = 0
-    is_first = False
     folders = listdir(TRAIN_FOLDER)
-    total = N * len(folders)
     files = []
     for label in folders:
-        tmp = listdir(join(TRAIN_FOLDER, label))[:N]
+        tmp = listdir(join(TRAIN_FOLDER, label))
         tmp = [join(TRAIN_FOLDER, label, file) for file in tmp]
         tmp = [(label, file) for file in tmp]
         files.extend(tmp)
-    # print(durations)
 
     p = Pool(20)
     n = len(files)
@@ -82,5 +76,5 @@ def make_test_data():
     print(len(features))
 
 
-# make_train_data()
+make_train_data()
 make_test_data()

@@ -55,15 +55,15 @@ y = encoder.fit_transform(labels)
 input_shape = X.shape[1:]
 num_classes = 6
 batch_size = 32
-epochs = 30
+epochs = 50
 
 model = Sequential()
-model.add(Conv2D(64, kernel_size=(7, 7), strides=(1, 1), activation='relu', input_shape=input_shape, padding='same'))
-model.add(MaxPooling2D(pool_size=(3, 3), strides=(2, 2), padding='same'))
+model.add(Conv2D(32, kernel_size=(7, 7), strides=(1, 1), activation='relu', input_shape=input_shape))
+model.add(MaxPooling2D(pool_size=(3, 3), strides=(1, 1)))
+model.add(Conv2D(64, kernel_size=(5, 5), activation='relu'))
+model.add(MaxPooling2D(pool_size=(3, 3)))
 # model.add(Dropout(0.2))
-model.add(Conv2D(128, kernel_size=(5, 5), activation='relu', padding='same'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Conv2D(256, kernel_size=(2, 2), activation='relu', padding='same'))
+model.add(Conv2D(128, kernel_size=(2, 2), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Flatten())
 model.add(Dense(200, activation='relu'))
@@ -101,6 +101,7 @@ for label, X in test_data:
         count_error_file += 1
     gender, accent = map_values[value]
     prediction_file.write(f"{label},{gender},{accent}\n")
+print(f"Cannot predict {count_error_file} files.")
 
 # evaluation("submission.csv", "data/public_test_gt.csv")
 

@@ -1,18 +1,13 @@
-import librosa
 import numpy as np
 import keras
 from keras import backend as K
 from keras import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
-import glob
-from os.path import dirname, basename, join
-from os import listdir
 from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 import matplotlib.pyplot as plt
-from multiprocessing import Pool
 import joblib
 from sklearn.model_selection import train_test_split
-from keras.callbacks import EarlyStopping
+
 from evaluation import evaluation
 
 K.tensorflow_backend._get_available_gpus()
@@ -58,16 +53,14 @@ batch_size = 32
 epochs = 30
 
 model = Sequential()
-model.add(Conv2D(64, kernel_size=(7, 7), strides=(1, 1), activation='relu', input_shape=input_shape, padding='same'))
-model.add(MaxPooling2D(pool_size=(3, 3), strides=(2, 2), padding='same'))
+model.add(Conv2D(64, kernel_size=(5, 5), strides=(1, 1), activation='relu', input_shape=input_shape))
+model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 # model.add(Dropout(0.2))
-model.add(Conv2D(128, kernel_size=(5, 5), activation='relu', padding='same'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Conv2D(256, kernel_size=(2, 2), activation='relu', padding='same'))
+model.add(Conv2D(128, kernel_size=(2, 2), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Flatten())
 model.add(Dense(200, activation='relu'))
-model.add(Dropout(0.2))
+# model.add(Dropout(0.2))
 model.add(Dense(num_classes, activation='softmax'))
 
 model.compile(loss=keras.losses.categorical_crossentropy,
@@ -76,10 +69,8 @@ model.compile(loss=keras.losses.categorical_crossentropy,
 
 model.summary()
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
-early_stopping = EarlyStopping(monitor='val_loss', patience=5)
-history = model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, verbose=1,
-                    validation_data=(X_test, y_test),
-                    callbacks=[early_stopping])
+
+history = model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, verbose=1, validation_data=(X_test, y_test))
 
 # Predictions
 import os
@@ -101,6 +92,7 @@ for label, X in test_data:
         count_error_file += 1
     gender, accent = map_values[value]
     prediction_file.write(f"{label},{gender},{accent}\n")
+print(f"Cannot predict {count_error_file} files.")
 
 # evaluation("submission.csv", "data/public_test_gt.csv")
 
