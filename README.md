@@ -16,7 +16,7 @@ Tập tin âm thanh được chia thành những frames dài 250ms không trùng
 Tập tin âm thanh đầu vào được đầu bởi thư viện librosa. Sau đó, kết quả với đặc trưng delta tương ứng. 
 Kết quả được đưa vào mạng convolutional neural network. 
 
-*Kiến trúc mạng convolutional nerual network*
+*Kiến trúc mạng convolutional neural network*
 
 Layer (type)                 Params                    Param #   
 =================================================================
