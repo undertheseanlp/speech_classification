@@ -63,8 +63,7 @@ def make_train_data():
 
 
 def make_test_data():
-    # TEST_FOLDER = "data/public_test"
-    TEST_FOLDER = "/data"
+    TEST_FOLDER = "data/test"
     tmp = listdir(TEST_FOLDER)
     files = []
     for label in tmp:
@@ -78,12 +77,13 @@ def make_test_data():
     print(len(features))
 
 
-parser = argparse.ArgumentParser("preprocessing.py")
-parser.add_argument("mode", nargs="+", help="train or test")
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser("preprocessing.py")
+    parser.add_argument("mode", nargs="+", help="train or test")
 
-args = parser.parse_args()
-mode = args.mode
-if mode == "train":
-    make_train_data()
-elif mode == "test":
-    make_test_data()
+    args = parser.parse_args()
+    mode = args.mode
+    if mode == "train":
+        make_train_data()
+    elif mode == "test":
+        make_test_data()
