@@ -79,7 +79,7 @@ def make_test_data():
 
 
 parser = argparse.ArgumentParser("preprocessing.py")
-parser.add_argument("option", nargs="+", help="train or test")
+parser.add_argument("mode", nargs="+", help="train or test")
 
 args = parser.parse_args()
 mode = args.mode
