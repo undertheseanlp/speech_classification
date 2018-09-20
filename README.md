@@ -65,7 +65,7 @@ pip install requirements.txt
 Chú ý: Dữ liệu train gồm có folder `train` cần đặt vào thư mục `data`
 
 ```
-python preprocessing.py train
+python preprocessing.py --mode train
 python train.py
 ```
 
@@ -74,7 +74,7 @@ python train.py
 Để dự đoán, chạy script `predict.py` 
 
 ```
-python preprocessing.py test
+python preprocessing.py --mode test
 python predict.py 
 ``` 
 
