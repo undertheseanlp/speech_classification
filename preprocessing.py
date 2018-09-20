@@ -45,7 +45,7 @@ def get_duration(filepath):
 
 
 def make_train_data():
-    TRAIN_FOLDER = "data/train"
+    TRAIN_FOLDER = "data/train_10"
     folders = listdir(TRAIN_FOLDER)
     files = []
     for label in folders:
@@ -63,7 +63,7 @@ def make_train_data():
 
 
 def make_test_data():
-    TEST_FOLDER = "data/test"
+    TEST_FOLDER = "data/test_10"
     tmp = listdir(TEST_FOLDER)
     files = []
     for label in tmp:
@@ -79,7 +79,7 @@ def make_test_data():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser("preprocessing.py")
-    parser.add_argument("mode", nargs="+", help="train or test")
+    parser.add_argument("--mode", help="train or test")
 
     args = parser.parse_args()
     mode = args.mode
