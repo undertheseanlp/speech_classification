@@ -1,4 +1,6 @@
-# Zalo AI Challenge
+# Vietnamese Speech Classification 
+
+Zalo AI Challenge
 
 Repo phục vụ cho Zalo AI Challenge: Voice Gender Classification
 
@@ -6,6 +8,7 @@ Nhóm tác giả:
 
 * Vũ Anh <anhv.ict91@gmail.com>
 * Truong Do <truongdq54@gmail.com>
+* Nguyễn Thế Anh <nguyentheanhhnvntd@gmail.com>
 
 
 # Mô tả thuật toán 
